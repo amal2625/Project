@@ -40,13 +40,24 @@ class TestSpider(scrapy.Spider):
 			new_link=test.xpath(".//li[@class='sp-id']/p[@class='sp-name']/a/@href").extract_first()
 			next_sub_page=response.urljoin(new_link)
 			yield scrapy.Request(url=next_sub_page, callback=self.final_result)
+		next_page=response.xpath("//div[@class='nav-page']")
+		final_link=next_page.xpath("//a[@class='next-page button btn-small']/@href").extract_first()
+		
+		# if final_link is not None:
+		# 	next_page_links=response.urljoin(final_link)
+		# 	yield scrapy.Request(url=next_page_links, callback=self.test)
+			
+			
 
 	def final_result(self, response):
-		image_url=response.xpath("//div[@class='profile-container']")
-		first_section=image_url.xpath(".//h1[@class='sp-title']/span").extract_first();
-
+		final_page=response.xpath("//div[@class='profile-container']")
+		title=final_page.xpath(".//h1[@class='sp-title']/span/text()").extract_first();
+		sub_title=final_page.xpath(".//h4/span[@class='sub']/text()").extract_first();
+		primary_location=final_page.xpath(".//div[@class='profile-details']").extract_first()
 		yield {
-		'Title':first_section
+		'Title':title,
+		'SubTitle':sub_title,
+		'primary_location':primary_location,
 		}
 
 
