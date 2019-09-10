@@ -18,7 +18,6 @@ class TestSpider(scrapy.Spider):
 
 	def test(self, response):
 		sub_name=response.xpath("//div[@class='SPList']/ul[@class='sp noselect']")
-		# sub_names=sub_name.xpath("//ul[@class='sp noselect']")
 		for test in sub_name:
 			new_link=test.xpath(".//li[@class='sp-id']/p[@class='sp-name']/a/@href").extract_first()
 			next_sub_page=response.urljoin(new_link)
@@ -26,9 +25,9 @@ class TestSpider(scrapy.Spider):
 		next_page=response.xpath("//div[@class='nav-page']")
 		final_link=next_page.xpath("//a[@class='next-page button btn-small']/@href").extract_first()
 		
-		# if final_link is not None:
-		# 	next_page_links=response.urljoin(final_link)
-		# 	yield scrapy.Request(url=next_page_links, callback=self.test)
+		if final_link is not None:
+			next_page_links=response.urljoin(final_link)
+			yield scrapy.Request(url=next_page_links, callback=self.test)
 			
 			
 
