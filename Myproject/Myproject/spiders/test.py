@@ -47,6 +47,8 @@ class TestSpider(scrapy.Spider):
 		about=''
 		website=''	
 		language=''
+		logo_url=final_page.xpath("..//div[@class='profile-image']/div[@class='image']/img/@data-original").extract_first()
+		
 		section_details_div=response.xpath("//div[@class='profile-content']/div[@class='section details']/table/tr")
 		for section in section_details_div:
 			label_names=section.xpath(".//td[1]/text()").extract_first()
@@ -60,14 +62,15 @@ class TestSpider(scrapy.Spider):
 				language=section.xpath(".//td[2]/text()").extract_first()
 		
 		yield {
-		'Page url':response.url,
+		'Logo Url':logo_url,
 		'Title':title,
 		'SubTitle':sub_title,
 		'Primary Location':primary_location,
-		'Main Area of Expertize':main_area,
+		'Main Area of Expertise':main_area,
 		'About':about,
 		'Website':website,
-		'Languge Spoken':language
+		'Language Spoken':language,
+		'Page url':response.url
 		}
 
 
